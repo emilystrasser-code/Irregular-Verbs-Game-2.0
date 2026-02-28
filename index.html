@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irregular Verbs Master</title>
+    <link rel="stylesheet" href="styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-animation"></div>
+
+    <div class="container">
+        <!-- Start Screen: Mission Control -->
+        <div id="start-screen" class="screen active gamer-dashboard">
+            <header class="dashboard-header">
+                <h1 class="gamer-title">IRREGULAR VERBS</h1>
+                <h2 class="gamer-subtitle">MASTER MODE</h2>
+                <div class="xp-bar-container">
+                    <div class="xp-bar-fill"></div>
+                </div>
+                <p class="tagline">TRAIN. FIGHT. CONQUER.</p>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Player Profile -->
+                <section class="player-profile card-block">
+                    <div class="avatar-circle">
+                        <span class="avatar-icon">👤</span>
+                    </div>
+                    <div class="player-info">
+                        <input type="text" id="player-name" class="gamer-input" placeholder="ENTER PLAYER NAME"
+                            autocomplete="off" />
+                        <div class="player-stats">
+                            <span class="level-badge" id="profile-level">LVL 1</span>
+                            <div class="coin-display">
+                                <span class="coin-icon">🟡</span> <span id="profile-coins" class="coin-count">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Game Modes -->
+                <section class="mode-selection">
+                    <h3 class="section-title">SELECT MODE</h3>
+                    <div class="mode-grid">
+                        <div class="mode-card active" data-mode="quick" data-rounds="15">
+                            <div class="mode-icon">🟢</div>
+                            <span class="mode-name">Quick Match</span>
+                            <span class="mode-desc">15 Verbs</span>
+                        </div>
+                        <div class="mode-card" data-mode="survival" data-rounds="999">
+                            <div class="mode-icon">🔵</div>
+                            <span class="mode-name">Survival</span>
+                            <span class="mode-desc">3 Lives</span>
+                        </div>
+                        <div class="mode-card" data-mode="speed" data-rounds="999">
+                            <div class="mode-icon">🟣</div>
+                            <span class="mode-name">Speed Run</span>
+                            <span class="mode-desc">60 Seconds</span>
+                        </div>
+                        <div class="mode-card" data-mode="boss" data-rounds="boss">
+                            <div class="mode-icon">🔴</div>
+                            <span class="mode-name">Boss Battle</span>
+                            <span class="mode-desc">Hard Verbs Only</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Difficulty -->
+                <section class="difficulty-selection">
+                    <h3 class="section-title">THREAT LEVEL</h3>
+                    <div class="difficulty-grid">
+                        <div class="diff-card active" data-level="1">
+                            <div class="diff-bars"><span class="bar full"></span><span class="bar empty"></span><span
+                                    class="bar empty"></span><span class="bar empty"></span></div>
+                            <span class="diff-name">ROOKIE</span>
+                        </div>
+                        <div class="diff-card" data-level="2">
+                            <div class="diff-bars"><span class="bar full"></span><span class="bar full"></span><span
+                                    class="bar empty"></span><span class="bar empty"></span></div>
+                            <span class="diff-name">PRO</span>
+                        </div>
+                        <div class="diff-card" data-level="3">
+                            <div class="diff-bars"><span class="bar full"></span><span class="bar full"></span><span
+                                    class="bar full"></span><span class="bar empty"></span></div>
+                            <span class="diff-name">ELITE</span>
+                        </div>
+                        <div class="diff-card" data-level="4">
+                            <div class="diff-bars"><span class="bar full"></span><span class="bar full"></span><span
+                                    class="bar full"></span><span class="bar full"></span></div>
+                            <span class="diff-name">LEGENDARY</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="action-footer">
+                <button id="btn-start" class="btn epic-btn">
+                    <span class="btn-text">ENTER THE ARENA</span>
+                    <div class="btn-glow"></div>
+                </button>
+                <button id="btn-show-leaderboard" class="btn alt-btn">RANKINGS</button>
+            </div>
+
+            <!-- Hidden inputs to store selection state for JS compatibility -->
+            <input type="hidden" id="round-length" value="15">
+            <input type="hidden" id="start-level" value="1">
+            <input type="hidden" id="game-mode" value="quick">
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <header class="game-header">
+                <div class="stat-box">
+                    <span class="stat-label">Level</span>
+                    <span id="stat-level" class="stat-value">1</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Progress</span>
+                    <span id="stat-progress" class="stat-value">0/15</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Timer/Lives</span>
+                    <span id="stat-extra" class="stat-value">--</span>
+                </div>
+                <div class="stat-box coin-box">
+                    <span class="stat-label">Coins</span>
+                    <div class="coin-wrapper">
+                        <span class="coin-icon">🟡</span>
+                        <span id="stat-coins" class="stat-value">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="boss-mode-indicator" class="boss-mode-indicator hidden">
+                ⚔️ VERB BOSS MODE ⚔️
+            </div>
+
+            <div class="round-progress-container">
+                <div id="round-progress-bar" class="round-progress-bar"></div>
+            </div>
+
+            <div class="streak-container">
+                <div id="streak-bar" class="streak-bar"></div>
+                <span id="streak-text" class="streak-text">Streak: 0</span>
+            </div>
+
+            <div class="card-container">
+                <div id="verb-card" class="verb-card">
+                    <p class="instruction">What is the Past Simple of:</p>
+                    <h2 id="current-verb" class="verb-text">go</h2>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <form id="answer-form">
+                    <input type="text" id="answer-input" placeholder="Type past simple here..." autocomplete="off"
+                        required />
+                    <button type="submit" class="btn primary-btn">Check</button>
+                </form>
+            </div>
+
+            <div id="feedback-area" class="feedback-area hidden">
+                <h3 id="feedback-message">Correct! 🎉</h3>
+                <p id="feedback-detail" class="hidden">The correct answer is <strong id="correct-answer"></strong>.</p>
+                <div id="coin-animation" class="coin-animation hidden">+10</div>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="screen">
+            <h2>Round <span class="highlight">Complete!</span></h2>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>Total Coins</h3>
+                    <p id="end-coins" class="result-value">0</p>
+                </div>
+                <div class="result-card correct">
+                    <h3>Correct</h3>
+                    <p id="end-correct" class="result-value">0</p>
+                </div>
+                <div class="result-card incorrect">
+                    <h3>Incorrect</h3>
+                    <p id="end-incorrect" class="result-value">0</p>
+                </div>
+            </div>
+
+            <div id="problem-verbs-container" class="problem-verbs-container hidden">
+                <h3>Problem Verbs (Review these!)</h3>
+                <ul id="problem-verbs-list"></ul>
+            </div>
+
+            <div class="action-buttons">
+                <button id="btn-play-again" class="btn primary-btn">Play Again</button>
+                <button id="btn-end-leaderboard" class="btn secondary-btn">Leaderboard</button>
+            </div>
+        </div>
+
+        <!-- Leaderboard Screen -->
+        <div id="leaderboard-screen" class="screen">
+            <h2>Top <span class="highlight">Players</span></h2>
+
+            <div class="leaderboard-container">
+                <table id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="btn-back-home" class="btn primary-btn">Back to Home</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
